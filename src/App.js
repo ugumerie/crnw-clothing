@@ -21,7 +21,7 @@ class App extends Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    //does have to re-render the page, it jst monitors if a user is authenticated or not
+    //doesn't have to re-render the page, it jst monitors if a user is authenticated or not
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
