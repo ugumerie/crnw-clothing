@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 
 import "./App.css";
 import Header from "./components/header/header.component";
@@ -11,12 +11,11 @@ import SignInAndSignUp from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.com
 import { setCurrentUser } from "./redux/user/user.actions";
 
 class App extends Component {
-
   // class propety that will unsubscribe from firebase auth to avoid memory leaks
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const {setCurrentUser} = this.props
+    const { setCurrentUser } = this.props;
 
     //doesn't have to re-render the page, it jst monitors if a user is authenticated or not
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
@@ -27,7 +26,7 @@ class App extends Component {
           setCurrentUser({
             id: snapShot.id,
             ...snapShot.data(),
-          })
+          });
         });
       } else {
         setCurrentUser(userAuth);
@@ -46,15 +45,24 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Hompage} />
           <Route path="/shop" component={ShopPage} />
-          <Route path="/signin" component={SignInAndSignUp} />
+          <Route
+            path="/signin"
+            render={() =>
+              this.props.currentUser ? <Redirect to="/" /> : <SignInAndSignUp />
+            }
+          />
         </Switch>
       </div>
     );
   }
 }
 
-const mapDisPatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
-})
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
 
-export default connect(null, mapDisPatchToProps)(App);
+const mapDisPatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(mapStateToProps, mapDisPatchToProps)(App);
