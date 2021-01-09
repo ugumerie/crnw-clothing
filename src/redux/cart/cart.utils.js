@@ -11,5 +11,22 @@ export const addItemToCart = (initialCartItems, cartItemToAdd) => {
     );
   }
 
-  return [...initialCartItems, {...cartItemToAdd, quantity: 1}]
+  return [...initialCartItems, { ...cartItemToAdd, quantity: 1 }];
+};
+
+export const removeItemFromCart = (cartItems, cartItemToRemove) => {
+  const existingCartItem = cartItems.find(
+    (cartitem) => cartitem.id === cartItemToRemove.id
+  );
+
+  if (existingCartItem.quantity === 1) {
+    return cartItems.filter((cartItem) => cartItem.id !== cartItemToRemove.id);
+  }
+
+  // there must be a cartitem to remove
+  return cartItems.map((cartItem) =>
+    cartItem.id === cartItemToRemove.id
+      ? { ...cartItem, quantity: cartItem.quantity - 1 }
+      : cartItem
+  );
 };
