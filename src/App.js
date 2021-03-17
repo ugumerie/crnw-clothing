@@ -5,7 +5,10 @@ import { createStructuredSelector } from "reselect";
 
 import "./App.css";
 import Header from "./components/header/header.component";
-import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
+import {
+  auth,
+  createUserProfileDocument,
+} from "./firebase/firebase.utils";
 import CheckoutPage from "./pages/checkout/checkout.component";
 import Hompage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
@@ -67,8 +70,8 @@ class App extends Component {
 
 //converting the mapStateToProps to use selectors for memoization
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
-})
+  currentUser: selectCurrentUser,
+});
 
 const mapDisPatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
